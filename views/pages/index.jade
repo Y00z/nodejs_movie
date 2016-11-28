@@ -1,0 +1,15 @@
+//继承
+extends ../layout
+//声明主要内容。
+block content
+    .container
+        .row
+            // - 传递电影列表过来{数组}， 然后遍历
+            each item in movies
+                .col-md-2
+                    .thumbnail
+                        a(href="./movie/#{item._id}")
+                            img(src='#{item.poster}',alt="#{item.title}")
+                        .caption
+                            h3 #{item.title}
+                            p: a.btn.btn-primary(href="/movie/#{item._id}", role="button") 观看预告片
