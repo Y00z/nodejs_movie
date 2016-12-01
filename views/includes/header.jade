@@ -3,3 +3,47 @@
         .page-header
             h1 #{title}
             small 科幻迷
+.navbar.navbar-defalut.navbar-fixed-buttom
+    .container
+        .navbar-header
+            a.navbar-brand(href="/") 科幻
+            if user
+                p.navbar-text.navbar-right
+                    span 欢迎您#{user.name}
+                    span &nbsp;|&nbsp;
+                    a.navbar-link(href="/logout") 退出
+            else
+                p.navbar-text.navbar-right
+                    a.navbar-link(href="#",data-toggle="modal",data-target="#signinModal") 注册
+                    span &nbsp;|&nbsp;
+                    a.navbar-link(href="#",data-toggle="modal",data-target="#signinLogin") 登录
+#signinModal.modal.fade
+    .modal-dialog
+        .modal-content
+            form(method="post",action="/user/signin")
+                .modal-header 注册
+                .modal-body
+                    .form-group
+                        label(for="signinName") 用户名
+                        input#signinName.form-control(name="user[name]" , type="text")
+                    .form-group
+                        label(for="signinPassword") 密码
+                        input#signinPassword.form-control(name="user[password]" , type="password")
+                .modal-footer
+                    button.btn.btn-default(type="submit",data-dismiss="modal") 关闭
+                    button.btn.btn-success(type="submit") 提交
+#signinLogin.modal.fade
+    .modal-dialog
+        .modal-content
+            form(method="post",action="/user/login")
+                .modal-header 登录
+                .modal-body
+                    .form-group
+                        label(for="loginName") 用户名
+                        input#loginName.form-control(name="user[name]" , type="text")
+                    .form-group
+                        label(for="loginPassword") 密码
+                        input#loginPassword.form-control(name="user[password]" , type="password")
+                .modal-footer
+                    button.btn.btn-default(type="submit",data-dismiss="modal") 关闭
+                    button.btn.btn-success(type="submit") 提交
