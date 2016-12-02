@@ -13,10 +13,10 @@ module.exports = function (app) {
     app.use(function (req, res, next) {
         //如果持久化了，就把user给全局变量，在前端也可以拿到。
         var _user = req.session.user
-        if (_user)
-            app.locals.user = _user
+        //如果user是空的，就把空的赋值给locals
+        app.locals.user = _user
         //跳过这个方法。
-        return next()
+        next()
     })
 
     //首页
