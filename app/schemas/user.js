@@ -14,6 +14,15 @@ var UserSchema = new mongoose.Schema({
         type: String
     },
     password: String,
+    // 0: nomal user
+    // 1: verified user
+    // 2: professonal user
+    // >10: admin
+    // >50: super admin
+    role : {            //用户权限
+        type:Number,
+        default : 0
+    },
     meta: {
         createAt: {
             type: Date,
@@ -30,7 +39,6 @@ var UserSchema = new mongoose.Schema({
 UserSchema.methods = {
     comparePassword: function (_password, cb) {
         //把穿进来的密码，和当前数据库中的密码比较
-        console.log(_password + "=====" + this.password)
         bcrypt.compare(_password,this.password ,function (err,isMatch) {
             //如果有错误，把错误放到回调方法中返回。
             if(err) return cb(err)

@@ -15,32 +15,26 @@ module.exports = function (app) {
         var _user = req.session.user
         //如果user是空的，就把空的赋值给locals
         app.locals.user = _user
-        //跳过这个方法。
+        //继续往下面执行
         next()
     })
 
     //首页
-    app.get('/',Index.index)
+    app.get('/', Index.index)
 
-
+//电影
     //电影详情
     app.get('/movie/:id', Movie.detail)
-
     //保存电影
-    app.post('/admin/movie/new', Movie.save)
-
-//编辑
-    app.get('/admin/update/:id', Movie.update)
-
-
-//添加电影
-    app.get('/admin/movie', Movie.add)
-//电影列表
-    app.get('/admin/list', Movie.list)
-
-
-//删除电影。
-    app.delete('/admin/list',Movie.del)
+    app.post('/admin/movie/new',User.signinRequired,User.adminRequired, Movie.save)
+    //编辑
+    app.get('/admin/movie/update/:id',User.signinRequired,User.adminRequired, Movie.update)
+    //添加电影
+    app.get('/admin/movie',User.signinRequired,User.adminRequired, Movie.add)
+    //电影列表
+    app.get('/admin/movie/list',User.signinRequired,User.adminRequired, Movie.list)
+    //删除电影。
+    app.delete('/admin/movielist',User.signinRequired,User.adminRequired, Movie.del)
 
 //  app.post('/user/signup/:userid
 //  通过req.params.userid 拿到:userid
@@ -56,13 +50,18 @@ module.exports = function (app) {
 // })
 
 
-    app.post('/user/signin', User.signin)
+//用户
 
-    app.get('/user/list', User.list)
-
-
+    //用户列表
+    app.get('/admin/user/list',User.signinRequired,User.adminRequired, User.list)
+    //登录
     app.post('/user/login', User.login)
-
-
+    app.get('/login', User.showLogin)
+    //注册
+    app.post('/user/signin', User.signin)
+    app.get('/signin', User.showSignin)
+    //注销
     app.get('/logout', User.logout)
+
+    app.delete('/admin/user/list',User.signinRequired,User.adminRequired,User.del)
 }
