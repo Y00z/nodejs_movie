@@ -53,7 +53,7 @@ exports.list = function (req, res) {
 exports.signinRequired = function (req, res, next) {
     var user = req.session.user
     if(!user)
-        return res.redirect("/signin");
+        return res.redirect("/login");
     //如果登录了就跳到下一步，验证权限
     next()
 }
@@ -62,7 +62,7 @@ exports.adminRequired = function (req, res, next) {
     var user = req.session.user
     //如果用户登录权限没有10就跳到登录页面。
     if(user.role <= 10)
-        res.redirect("/signin")
+        res.redirect("/login")
     next()
 }
 //登录

@@ -10,6 +10,10 @@
             if user
                 p.navbar-text.navbar-right
                     span 欢迎您#{user.name}
+                    if(user.role >= 50)
+                        span   超级无敌管理员
+                    else
+                        span   普通管理员
                     span &nbsp;|&nbsp;
                     a.navbar-link(href="/logout") 退出
             else

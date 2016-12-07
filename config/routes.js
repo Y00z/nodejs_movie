@@ -5,6 +5,7 @@
 var Index = require('../app/controllers/index')
 var Movie = require('../app/controllers/movie')
 var User = require('../app/controllers/user')
+var Comment = require('../app/controllers/comment')
 
 //接收传进来的app，然后抛出
 module.exports = function (app) {
@@ -34,7 +35,7 @@ module.exports = function (app) {
     //电影列表
     app.get('/admin/movie/list',User.signinRequired,User.adminRequired, Movie.list)
     //删除电影。
-    app.delete('/admin/movielist',User.signinRequired,User.adminRequired, Movie.del)
+    app.delete('/admin/movie/list',User.signinRequired,User.adminRequired, Movie.del)
 
 //  app.post('/user/signup/:userid
 //  通过req.params.userid 拿到:userid
@@ -62,6 +63,9 @@ module.exports = function (app) {
     app.get('/signin', User.showSignin)
     //注销
     app.get('/logout', User.logout)
-
     app.delete('/admin/user/list',User.signinRequired,User.adminRequired,User.del)
+
+
+
+    app.post('/user/comment',User.signinRequired, Comment.save)
 }

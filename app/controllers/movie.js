@@ -2,23 +2,47 @@
  * Created by Yooz on 2016/12/1.
  */
 var Movie = require("../models/movie");
+var Comment = require("../models/comment");
 var _ = require("underscore");
 
 //电影详情
-exports.detail =  function (req, res) {
+exports.detail = function (req, res) {
     //获取参数中的id
+    // var id = req.params.id
+    // Movie.findByid(id, function (err, movie) {
+    //     //先通过id找到movie后，
+    //     //再通过movie的id来查询comment
+    //     Comment.find({movie: id}, function (err, comment) {
+    //         res.render('detail', {
+    //             title: "详情页",
+    //             movie: movie,
+    //             comments : comment
+    //         })
+    //     })
+    // })
     var id = req.params.id
-    Movie.findByid(id, function (err, movie) {
-        res.render('detail', {
-            title: "详情页",
-            movie: movie
-        })
+    Movie.findByid(id,function (err, movie) {
+        console.log("movie")
+        console.log(movie)
+        Comment
+            .find({movie:id})
+            //连表查询，from是Comment的一个字段，这个是指向的是user的_id
+            //这个方法是通过执行的user，查询user中的name。
+            .populate('from',"name")
+            .exec(function (err, comment) {
+                console.log("comment")
+                console.log(comment)
+                res.render('detail',{
+                    title:'详情页',
+                    movie:movie,
+                    comments:comment
+                })
+            })
     })
-
 }
 
 //保存电影
-exports.save =  function (req, res) {
+exports.save = function (req, res) {
     console.log(req.body)
     //提交的请求体中对象的id
     var id = req.body.movie._id
@@ -64,7 +88,7 @@ exports.save =  function (req, res) {
 }
 
 //编辑
-exports.update =  function (req, res) {
+exports.update = function (req, res) {
     var id = req.params.id
     if (id) {   //如果存在的话。
         Movie.findByid(id, function (err, movie) {
@@ -79,7 +103,7 @@ exports.update =  function (req, res) {
 
 
 //添加电影
-exports.add =  function (req, res) {
+exports.add = function (req, res) {
     res.render('admin', {
         title: '后台',
         movie: {
@@ -96,7 +120,7 @@ exports.add =  function (req, res) {
 }
 
 //电影列表
-exports.list =  function (req, res) {
+exports.list = function (req, res) {
     Movie.fatch(function (err, movies) {
         if (err) console.log(err)
         res.render('list', {
@@ -108,7 +132,7 @@ exports.list =  function (req, res) {
 
 
 //删除电影。
-exports.del =  function (req, res) {
+exports.del = function (req, res) {
     var id = req.query.id
     if (id) {
         Movie.remove({_id: id}, function (err, movie) {
