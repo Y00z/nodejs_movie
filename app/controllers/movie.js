@@ -22,15 +22,14 @@ exports.detail = function (req, res) {
     // })
     var id = req.params.id
     Movie.findByid(id,function (err, movie) {
-        console.log("movie")
-        console.log(movie)
         Comment
             .find({movie:id})
             //连表查询，from是Comment的一个字段，这个是指向的是user的_id
             //这个方法是通过执行的user，查询user中的name。
             .populate('from',"name")
+            //把查询到的comment中的reply数组中的from和to字段对应的User对象中的name取出来。
+            .populate('reply.from reply.to', 'name')
             .exec(function (err, comment) {
-                console.log("comment")
                 console.log(comment)
                 res.render('detail',{
                     title:'详情页',

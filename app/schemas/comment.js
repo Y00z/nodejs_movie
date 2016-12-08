@@ -15,8 +15,14 @@ var CommentSchema = new Schema({
     movie : {type :ObjectId ,ref:'Movie'},
     //评论的人
     from : {type :ObjectId ,ref:'User'},
-    //评论的回复。
-    to: {type :ObjectId ,ref:'User'},
+    //所有的小评论
+    reply:[{
+        from:{type :ObjectId ,ref:'User'},
+        //评论的回复。
+        to: {type :ObjectId ,ref:'User'},
+        //评论内容
+        content : String
+    }],
     //评论内容
     content : String,
     meta : {

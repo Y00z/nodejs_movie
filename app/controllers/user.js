@@ -81,7 +81,7 @@ exports.login = function (req, res) {
                     req.session.user = user
                     //密码是正确的
                     console.log("密码正确")
-                    res.redirect("/admin/user/list")
+                    res.redirect("/")
                 } else {
                     res.redirect("/login")
                 }
