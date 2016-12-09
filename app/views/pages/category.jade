@@ -1,0 +1,43 @@
+//继承
+extends ../layout
+//声明主要内容。
+block content
+    .container
+        .row
+            form.form-horizontal(method="post" ,action="/admin/category/new")
+                .form-group
+                    label.col-sm-3.control-label(for="inputName") 分类
+                    .col-sm-8
+                        input#inputName.form-control(type="text" name="category[name]" value=category.name)
+                .form-group
+                    .col-sm-2
+                        input#submit.form-control(type="submit",value="提交")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
