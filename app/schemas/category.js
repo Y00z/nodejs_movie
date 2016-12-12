@@ -49,7 +49,7 @@ CategorySchema.statics = {
     //通过id查询
     findByid: function ( id,cb) {
         return this
-            .findOne({"_id":id})
+            .findOne({_id:id})
             .exec(cb)
     },
 }

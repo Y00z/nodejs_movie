@@ -3,13 +3,13 @@ module.exports = function (grunt) {
     grunt.initConfig({
         watch: {
             jade: {
-                files: ['views/**'],     //监听改变文件的目录
+                files: ['app/views/**'],     //监听改变文件的目录
                 options: {
                     livereload: true
                 }
             },
             js: {
-                files: ['putlic/js/**', 'app/modeles/**/*.js', 'app/schemas/**/*.js'],  //监听js文件的改变
+                files: ['putlic/js/**', 'app/modeles/**/*.js', 'app/schemas/**/*.js','app/views/**'],  //监听js文件的改变
                 //tasks:['jshint'],    语法检测
                 options: {
                     livereload: true

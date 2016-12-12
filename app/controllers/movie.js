@@ -3,6 +3,7 @@
  */
 var Movie = require("../models/movie");
 var Comment = require("../models/comment");
+var Category = require("../models/category");
 var _ = require("underscore");
 
 //电影详情
@@ -21,20 +22,20 @@ exports.detail = function (req, res) {
     //     })
     // })
     var id = req.params.id
-    Movie.findByid(id,function (err, movie) {
+    Movie.findByid(id, function (err, movie) {
         Comment
-            .find({movie:id})
+            .find({movie: id})
             //连表查询，from是Comment的一个字段，这个是指向的是user的_id
             //这个方法是通过执行的user，查询user中的name。
-            .populate('from',"name")
+            .populate('from', "name")
             //把查询到的comment中的reply数组中的from和to字段对应的User对象中的name取出来。
             .populate('reply.from reply.to', 'name')
             .exec(function (err, comment) {
                 console.log(comment)
-                res.render('detail',{
-                    title:'详情页',
-                    movie:movie,
-                    comments:comment
+                res.render('detail', {
+                    title: '详情页',
+                    movie: movie,
+                    comments: comment
                 })
             })
     })
@@ -49,7 +50,8 @@ exports.save = function (req, res) {
     var movieObj = req.body.movie
     var _movie
 
-    if (id !== 'undefined') { //判断id是否存在，如果存在说明这个电影，已经在数据库里面的
+    if (id) { //判断id是否存在，如果存在说明这个电影，已经在数据库里面的
+        console.log("存在")
         //已经存在了，更新
         Movie.findByid(id, function (err, movie) {
             if (err) console.log(err)
@@ -64,24 +66,28 @@ exports.save = function (req, res) {
             })
         })
     } else {//不存在，储存。
-
+        console.log("不存在")
         //定义要存入对象的数据为提交的数据
-        _movie = new Movie({
-            title: movieObj.title,
-            director: movieObj.director,
-            countrie: movieObj.countrie,
-            language: movieObj.language,
-            year: movieObj.year,
-            flash: movieObj.flash,
-            descript: movieObj.descript,
-            poster: movieObj.poster,
-        })
+        _movie = new Movie(movieObj)
+
+        var categoryId = movieObj.category;
+        console.log("categoryId:"+categoryId)
 
         //存入数据库
         _movie.save(function (err, movie) {
             if (err) console.log(err)
-            //储存成功后，跳转到电影的详情页。
-            res.redirect("/movie/" + movie._id)
+            Category.findOne({_id: categoryId}, function (err, category) {
+                console.log("category:"+category)
+                if(err) console.log(err)
+                category.movie.push(movie._id)
+                category.save(function (err, category) {
+                    if (err) console.log(err)
+                    //储存成功后，跳转到电影的详情页。
+                    res.redirect("/movie/" + movie._id)
+                })
+            })
+
+
         })
     }
 }
@@ -92,9 +98,13 @@ exports.update = function (req, res) {
     if (id) {   //如果存在的话。
         Movie.findByid(id, function (err, movie) {
             if (err) console.log(err)
-            res.render("admin", {
-                title: "更新",
-                movie: movie
+            Category.fatch(function (err, categorys) {
+                if (err) console.log(err)
+                res.render("admin", {
+                    title: "更新",
+                    movie: movie,
+                    categorys: categorys
+                })
             })
         })
     }
@@ -103,18 +113,12 @@ exports.update = function (req, res) {
 
 //添加电影
 exports.add = function (req, res) {
-    res.render('admin', {
-        title: '后台',
-        movie: {
-            title: "",
-            director: "",
-            countrie: "",
-            language: "",
-            poster: "",
-            flash: "",
-            year: "",
-            descript: ""
-        }
+    Category.fatch(function (err, categorys) {
+        res.render('admin', {
+            title: '后台',
+            movie: {},
+            categorys: categorys
+        })
     })
 }
 

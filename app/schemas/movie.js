@@ -3,9 +3,11 @@
  */
 //模式
 var mongoose = require("mongoose");
+var Schema = mongoose.Schema
+var ObjectId = Schema.Types.ObjectId
 
 //定义数据库的字段
-var MovieSchema = new mongoose.Schema({
+var MovieSchema = new Schema({
     title : String,
     director : String,
     countrie : String,
@@ -14,6 +16,7 @@ var MovieSchema = new mongoose.Schema({
     flash : String,
     descript : String,
     poster : String,
+    category :{type:ObjectId,ref:'Category'},
     meta : {
         createAt:{
             type:Date,
