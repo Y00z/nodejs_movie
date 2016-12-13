@@ -9,7 +9,6 @@ block content
                     tr
                         th 类型
                         th 时间
-                        th 查看
                         th 修改
                         th 删除
                 tbody
@@ -18,10 +17,9 @@ block content
                             td #{item.name}
                             //td #{item.year}
                             td #{item.meta.updateAt}
-                            td: a(target="_blank" , href="../user/#{item._id}") 查看
-                            td: a(target="_blank" , href="../admin/category/update/#{item._id}") 修改
+                            td: a(target="_blank" , href="/admin/category/update/#{item._id}") 修改
                             td
-                                button.btn.btn-danger.del(type="button",data-id="#{item._id}") 删除
-                    //script(src="/js/user.js")
+                                button.btn.btn-danger.delcategory(type="button",data-id="#{item._id}") 删除
+                    script(src="/js/admin.js")
 
 

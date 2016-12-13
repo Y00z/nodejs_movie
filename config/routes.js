@@ -37,14 +37,19 @@ module.exports = function (app) {
     app.get('/admin/movie/list',User.signinRequired,User.adminRequired, Movie.list)
     //删除电影。
     app.delete('/admin/movie/list',User.signinRequired,User.adminRequired, Movie.del)
+
+
+
+//分类
     //添加分类
     app.get('/admin/category',User.signinRequired,User.adminRequired, Categoty.add)
     //保存分类
     app.post('/admin/category/new' ,User.signinRequired,User.adminRequired,Categoty.save )
     //分类列表
     app.get('/admin/category/list',User.signinRequired,User.adminRequired, Categoty.list)
-
-
+    //编辑分类
+    app.get('/admin/category/update/:id',User.signinRequired,User.adminRequired, Categoty.update)
+    app.delete('/admin/category/list',User.signinRequired,User.adminRequired,Categoty.del)
 //  app.post('/user/signup/:userid
 //  通过req.params.userid 拿到:userid
 //

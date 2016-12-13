@@ -71,23 +71,23 @@ exports.save = function (req, res) {
         _movie = new Movie(movieObj)
 
         var categoryId = movieObj.category;
-        console.log("categoryId:"+categoryId)
+        console.log("categoryId:" + categoryId)
 
         //存入数据库
         _movie.save(function (err, movie) {
             if (err) console.log(err)
-            Category.findOne({_id: categoryId}, function (err, category) {
-                console.log("category:"+category)
-                if(err) console.log(err)
-                category.movie.push(movie._id)
-                category.save(function (err, category) {
+            if (categoryId) {
+                Category.findOne({_id: categoryId}, function (err, category) {
+                    console.log("category:" + category)
                     if (err) console.log(err)
-                    //储存成功后，跳转到电影的详情页。
-                    res.redirect("/movie/" + movie._id)
+                    category.movie.push(movie._id)
+                    category.save(function (err, category) {
+                        if (err) console.log(err)
+                    })
                 })
-            })
-
-
+            }
+            //储存成功后，跳转到电影的详情页。
+            res.redirect("/movie/" + movie._id)
         })
     }
 }
