@@ -4,12 +4,17 @@ extends ../layout
 block content
     .container
         .row
-            // - 传递电影列表过来{数组}， 然后遍历
-            each item in movies
-                .col-md-2
-                    .thumbnail
-                        a(href="./movie/#{item._id}")
-                            img(src='#{item.poster}',alt="#{item.title}")
-                        .caption
-                            h3 #{item.title}
-                            p: a.btn.btn-primary(href="/movie/#{item._id}", role="button") 观看预告片
+            each cat in categorys
+                .panel-heading
+                    h3 #{cat.name}
+                .panel-body
+                    if cat.movie && cat.movie.length > 0
+                        // - 传递电影列表过来{数组}， 然后遍历
+                        each item in cat.movie
+                            .col-md-2
+                                .thumbnail
+                                    a(href="./movie/#{item._id}")
+                                        img(src='#{item.poster}',alt="#{item.title}")
+                                    .caption
+                                        h3 #{item.title}
+                                        p: a.btn.btn-primary(href="/movie/#{item._id}", role="button") 观看预告片

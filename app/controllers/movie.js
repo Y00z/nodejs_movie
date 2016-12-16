@@ -48,22 +48,43 @@ exports.save = function (req, res) {
     var id = req.body.movie._id
     //提交的对象
     var movieObj = req.body.movie
+    //提交的分类id
+    var categoryId = movieObj.category
     var _movie
 
     if (id) { //判断id是否存在，如果存在说明这个电影，已经在数据库里面的
-        console.log("存在")
         //已经存在了，更新
-        Movie.findByid(id, function (err, movie) {
+        Movie.findByid(id, function (err, movie_) {
             if (err) console.log(err)
-
+            var _category = movie_.category
             //提交上来的数据，替换掉数据库已经存在的数据。  (新的替换掉旧的)
-            _movie = _.extend(movie, movieObj) //第一个旧的，第二个新的。
+            _movie = _.extend(movie_, movieObj) //第一个旧的，第二个新的。
             //存入数据库
             _movie.save(function (err, movie) {
                 if (err) console.log(err)
-                //储存成功后，跳转到电影的详情页。
-                res.redirect("/movie/" + movie._id)
+                //如果提交上来的分类，和原来的分类不同，那么就说明分类也更改了，重新保存分类。
+                console.log(categoryId+":" + _category)
+                if (categoryId != _category) {
+                    console.log("更改了分类")
+                    //先保存修改后的分类。
+                    Category.findByid(categoryId, function (err, category) {
+                        if (err) console.log(err)
+                        category.movie.push(movie._id)
+                        category.save(function (err, category) {
+                            if (err) console.log(err)
+                        })
+                    })
+                    //再删除之前分类中的moive_id
+                    Category.update({_id:_category},{$pull:{"movie":movie_._id}},function (err,category) {
+                        if(err) console.log(err)
+                        console.log("删除操作")
+                        console.log(_category + ":" + movie_)
+                    })
+                }
+
             })
+            //储存成功后，跳转到电影的详情页。
+            return res.redirect("/movie/" + movie_._id)
         })
     } else {//不存在，储存。
         console.log("不存在")
