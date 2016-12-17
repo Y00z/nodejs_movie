@@ -28,28 +28,27 @@ module.exports = function (app) {
     //电影详情
     app.get('/movie/:id', Movie.detail)
     //保存电影
-    app.post('/admin/movie/new',User.signinRequired,User.adminRequired, Movie.save)
+    app.post('/admin/movie/new', User.signinRequired, User.adminRequired, Movie.savePoster, Movie.save)
     //编辑
-    app.get('/admin/movie/update/:id',User.signinRequired,User.adminRequired, Movie.update)
+    app.get('/admin/movie/update/:id', User.signinRequired, User.adminRequired, Movie.update)
     //添加电影
-    app.get('/admin/movie',User.signinRequired,User.adminRequired, Movie.add)
+    app.get('/admin/movie', User.signinRequired, User.adminRequired, Movie.add)
     //电影列表
-    app.get('/admin/movie/list',User.signinRequired,User.adminRequired, Movie.list)
+    app.get('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.list)
     //删除电影。
-    app.delete('/admin/movie/list',User.signinRequired,User.adminRequired, Movie.del)
-
+    app.delete('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.del)
 
 
 //分类
     //添加分类
-    app.get('/admin/category',User.signinRequired,User.adminRequired, Categoty.add)
+    app.get('/admin/category', User.signinRequired, User.adminRequired, Categoty.add)
     //保存分类
-    app.post('/admin/category/new' ,User.signinRequired,User.adminRequired,Categoty.save )
+    app.post('/admin/category/new', User.signinRequired, User.adminRequired, Categoty.save)
     //分类列表
-    app.get('/admin/category/list',User.signinRequired,User.adminRequired, Categoty.list)
+    app.get('/admin/category/list', User.signinRequired, User.adminRequired, Categoty.list)
     //编辑分类
-    app.get('/admin/category/update/:id',User.signinRequired,User.adminRequired, Categoty.update)
-    app.delete('/admin/category/list',User.signinRequired,User.adminRequired,Categoty.del)
+    app.get('/admin/category/update/:id', User.signinRequired, User.adminRequired, Categoty.update)
+    app.delete('/admin/category/list', User.signinRequired, User.adminRequired, Categoty.del)
 //  app.post('/user/signup/:userid
 //  通过req.params.userid 拿到:userid
 //
@@ -67,7 +66,7 @@ module.exports = function (app) {
 //用户
 
     //用户列表
-    app.get('/admin/user/list',User.signinRequired,User.adminRequired, User.list)
+    app.get('/admin/user/list', User.signinRequired, User.adminRequired, User.list)
     //登录
     app.post('/user/login', User.login)
     app.get('/login', User.showLogin)
@@ -76,11 +75,10 @@ module.exports = function (app) {
     app.get('/signin', User.showSignin)
     //注销
     app.get('/logout', User.logout)
-    app.delete('/admin/user/list',User.signinRequired,User.adminRequired,User.del)
-    app.post('/user/comment',User.signinRequired, Comment.save)
-
+    app.delete('/admin/user/list', User.signinRequired, User.adminRequired, User.del)
+    app.post('/user/comment', User.signinRequired, Comment.save)
 
 
     //results
-    app.get('/results',Index.search)
+    app.get('/results', Index.search)
 }

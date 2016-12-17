@@ -5,6 +5,9 @@ var Movie = require("../models/movie");
 var Comment = require("../models/comment");
 var Category = require("../models/category");
 var _ = require("underscore");
+var fs = require('fs');
+//path 为当前文件所在路径
+var path = require('path');
 
 //电影详情
 exports.detail = function (req, res) {
@@ -52,6 +55,10 @@ exports.save = function (req, res) {
     var categoryId = movieObj.category
     var _movie
 
+    if(req.poster){
+        movieObj.poster = req.poster
+    }
+
     if (id) { //判断id是否存在，如果存在说明这个电影，已经在数据库里面的
         //已经存在了，更新
         Movie.findByid(id, function (err, movie_) {
@@ -63,7 +70,7 @@ exports.save = function (req, res) {
             _movie.save(function (err, movie) {
                 if (err) console.log(err)
                 //如果提交上来的分类，和原来的分类不同，那么就说明分类也更改了，重新保存分类。
-                console.log(categoryId+":" + _category)
+                console.log(categoryId + ":" + _category)
                 if (categoryId != _category) {
                     console.log("更改了分类")
                     //先保存修改后的分类。
@@ -75,8 +82,8 @@ exports.save = function (req, res) {
                         })
                     })
                     //再删除之前分类中的moive_id
-                    Category.update({_id:_category},{$pull:{"movie":movie_._id}},function (err,category) {
-                        if(err) console.log(err)
+                    Category.update({_id: _category}, {$pull: {"movie": movie_._id}}, function (err, category) {
+                        if (err) console.log(err)
                         console.log("删除操作")
                         console.log(_category + ":" + movie_)
                     })
@@ -166,5 +173,39 @@ exports.del = function (req, res) {
                 res.json({success: 1})
             }
         })
+    }
+}
+
+//上传海报
+exports.savePoster = function (req, res, next) {
+    //获取提交上来的图片数据，posterData是图片数据的json串
+    var posterData = req.files.uploadPoster
+    console.log(req.files)
+    console.log(posterData)
+    //获取图片数据所在路径
+    var filePath = posterData.path
+    //获取图片名字
+    var originalFilename = posterData.originalFilename
+    //如果有名字就说明有上传图片
+    if(originalFilename){
+        //读取到图片数据
+        fs.readFile(filePath,function (err, data) {
+            //当前时间
+            var timeName = Date.now()
+            //posterData是图片数据的json穿，type字段是图片类型名字
+            var type = posterData.type.split('/')[1]
+            //定义图片名称
+            var poster = timeName+"."+type
+            //定义图片保存路径， __dirname表示当前文件所在路径
+            var newPath = path.join(__dirname,'../../','/public/upload/'+poster)
+            //写入图片
+            fs.writeFile(newPath,data,function (err) {
+                //把poster放到请求头中.
+                req.poster = poster
+                next();
+            })
+        })
+    }else{
+        next()
     }
 }

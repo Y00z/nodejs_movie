@@ -8,9 +8,9 @@ block content
                 .panel-heading
                     h3 #{keyword}
                 .panel-body
-                    if category.movie && category.movie.length > 0
+                    if movies && movies.length > 0
                         // - 传递电影列表过来{数组}， 然后遍历
-                        each item in category.movie
+                        each item in movies
                             .col-md-2
                                 .thumbnail
                                     a(href="./movie/#{item._id}")
