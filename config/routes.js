@@ -78,4 +78,9 @@ module.exports = function (app) {
     app.get('/logout', User.logout)
     app.delete('/admin/user/list',User.signinRequired,User.adminRequired,User.del)
     app.post('/user/comment',User.signinRequired, Comment.save)
+
+
+
+    //results
+    app.get('/results',Index.search)
 }

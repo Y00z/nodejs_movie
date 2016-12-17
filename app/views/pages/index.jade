@@ -6,7 +6,8 @@ block content
         .row
             each cat in categorys
                 .panel-heading
-                    h3 #{cat.name}
+                    h3
+                        a(href="/results?cat=#{cat._id}&p=0") #{cat.name}
                 .panel-body
                     if cat.movie && cat.movie.length > 0
                         // - 传递电影列表过来{数组}， 然后遍历

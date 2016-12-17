@@ -28,13 +28,35 @@ exports.index = function (req, res) {
     Category
         .find({})
         //让categoty同时具有movie(个人理解)
-        .populate({path: 'movie', options: {limit: 8}})
+        .populate({path: 'movie',select:'title poster', options: {limit: 8}})
         .exec(function (err, categorys) {
-            if(err) console.log(err)
+            if (err) console.log(err)
             console.log(categorys)
-            res.render('index',{
-                title:'首页',
-                categorys : categorys
+            res.render('index', {
+                title: '首页',
+                categorys: categorys
+            })
+        })
+}
+
+
+exports.search = function (req, res) {
+    var catId = req.query.cat
+    var page = req.query.p
+    var index = page * 2
+
+    Category
+        .find({_id : catId})
+        //让categoty同时具有movie(个人理解)
+        .populate({path: 'movie', select:'title poster' ,options: {limit: 8, skip: index}})
+        .exec(function (err, categorys) {
+            if (err) console.log(err)
+            //取categorys数组中的角标0对象，如果没有就是{}空
+            var category = categorys[0] || {}
+            res.render('results', {
+                title: 'yooz 结果列表页面',
+                keyword : category.name,
+                category: category
             })
         })
 }
