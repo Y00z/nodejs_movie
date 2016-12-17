@@ -28,7 +28,7 @@ exports.index = function (req, res) {
     Category
         .find({})
         //让categoty同时具有movie(个人理解)
-        .populate({path: 'movie',select:'title poster', options: {limit: 8}})
+        .populate({path: 'movie', select: 'title poster', options: {limit: 8}})
         .exec(function (err, categorys) {
             if (err) console.log(err)
             console.log(categorys)
@@ -42,21 +42,31 @@ exports.index = function (req, res) {
 
 exports.search = function (req, res) {
     var catId = req.query.cat
-    var page = req.query.p
-    var index = page * 2
-
+    var page = parseInt(req.query.p,10) || 0
+    var count = 2
+    var index = page * count
     Category
-        .find({_id : catId})
-        //让categoty同时具有movie(个人理解)
-        .populate({path: 'movie', select:'title poster' ,options: {limit: 8, skip: index}})
+        .find({_id: catId})
+        //让categoty同时具有movie(个人理解), 查找出类型中limit2,skip: index 的电影，每页只显示2部
+        .populate({path: 'movie', select: 'title poster', options: {limit: 2, skip: index}})
         .exec(function (err, categorys) {
             if (err) console.log(err)
-            //取categorys数组中的角标0对象，如果没有就是{}空
-            var category = categorys[0] || {}
-            res.render('results', {
-                title: 'yooz 结果列表页面',
-                keyword : category.name,
-                category: category
+                                        //查找出类型中所有的电影。
+            Category.find({_id: catId}).populate({path: 'movie', select: 'title poster',}).exec(function (err, categoryall) {
+
+                //取categorys数组中的角标0对象，如果没有就是{}空
+                var category = categorys[0] || {}
+                //  类型中全部的电影
+                var categoryall = categoryall[0] || {}
+                var movies = categoryall.movie || []
+                res.render('results', {
+                    title: 'yooz 结果列表页面',
+                    keyword: category.name,
+                    category: category,
+                    totalPage: Math.ceil(movies.length / count),
+                    query: 'cat=' + catId,
+                    currentPage: (page + 1)
+                })
             })
         })
 }
