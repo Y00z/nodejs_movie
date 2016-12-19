@@ -8,32 +8,36 @@ var ObjectId = Schema.Types.ObjectId
 
 //定义数据库的字段
 var MovieSchema = new Schema({
-    title : String,
-    director : String,
-    countrie : String,
-    language : String,
-    year : Number,
-    flash : String,
-    descript : String,
-    poster : String,
-    category :{type:ObjectId,ref:'Category'},
-    meta : {
-        createAt:{
-            type:Date,
+    title: String,
+    director: String,
+    countrie: String,
+    language: String,
+    year: Number,
+    flash: String,
+    descript: String,
+    poster: String,
+    pv: {
+        type: Number,
+        default: 0
+    },
+    category: {type: ObjectId, ref: 'Category'},
+    meta: {
+        createAt: {
+            type: Date,
             default: Date.now()
         },
-        updateAt:{
-            type:Date,
+        updateAt: {
+            type: Date,
             default: Date.now()
         }
     }
 })
 
 //每存储的时候，都会调用一次这个方法。
-MovieSchema.pre('save',function (next) {
-    if(this.isNew){ //数据是否新加的。
+MovieSchema.pre('save', function (next) {
+    if (this.isNew) { //数据是否新加的。
         this.meta.createAt = this.meta.updateAt = Date.now() //添加的时间，和修改时间，都改成当前时间
-    } else{  //数据已经存在，就说明是修改更新数据，那么就只更新修改时间
+    } else {  //数据已经存在，就说明是修改更新数据，那么就只更新修改时间
         this.meta.updateAt = Date.now()
     }
     //执行该方法后，存储过程才会走下去。
@@ -49,9 +53,9 @@ MovieSchema.statics = {
             .exec(cb)
     },
     //通过id查询
-    findByid: function ( id,cb) {
+    findByid: function (id, cb) {
         return this
-            .findOne({"_id":id})
+            .findOne({"_id": id})
             .exec(cb)
     },
 }

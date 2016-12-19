@@ -25,6 +25,10 @@ exports.detail = function (req, res) {
     //     })
     // })
     var id = req.params.id
+    //在原始数据上也就是pv 加上1
+    Movie.update({_id:id},{$inc:{pv:1}},function (err) {
+        if(err) console.log(err)
+    })
     Movie.findByid(id, function (err, movie) {
         Comment
             .find({movie: id})

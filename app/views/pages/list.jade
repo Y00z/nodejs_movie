@@ -11,6 +11,7 @@ block content
                         th 导演
                         th 国家
                         th 上映时间
+                        th pv
                         //-th 录入事件
                         th 查看
                         th 更新
@@ -22,6 +23,7 @@ block content
                             td #{item.director}
                             td #{item.countrie}
                             td #{item.year}
+                            td #{item.pv}
                             //- td #{moment(item.meta.createAt).format('MM/DD/YYYY')}
                             td: a(target="_blank" , href="/movie/#{item._id}") 查看
                             td: a(target="_blank" , href="/admin/movie/update/#{item._id}") 修改
