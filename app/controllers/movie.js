@@ -26,8 +26,8 @@ exports.detail = function (req, res) {
     // })
     var id = req.params.id
     //在原始数据上也就是pv 加上1
-    Movie.update({_id:id},{$inc:{pv:1}},function (err) {
-        if(err) console.log(err)
+    Movie.update({_id: id}, {$inc: {pv: 1}}, function (err) {
+        if (err) console.log(err)
     })
     Movie.findByid(id, function (err, movie) {
         Comment
@@ -59,7 +59,7 @@ exports.save = function (req, res) {
     var categoryId = movieObj.category
     var _movie
 
-    if(req.poster){
+    if (req.poster) {
         movieObj.poster = req.poster
     }
 
@@ -191,25 +191,25 @@ exports.savePoster = function (req, res, next) {
     //获取图片名字
     var originalFilename = posterData.originalFilename
     //如果有名字就说明有上传图片
-    if(originalFilename){
+    if (originalFilename) {
         //读取到图片数据
-        fs.readFile(filePath,function (err, data) {
+        fs.readFile(filePath, function (err, data) {
             //当前时间
             var timeName = Date.now()
             //posterData是图片数据的json穿，type字段是图片类型名字
             var type = posterData.type.split('/')[1]
             //定义图片名称
-            var poster = timeName+"."+type
+            var poster = timeName + "." + type
             //定义图片保存路径， __dirname表示当前文件所在路径
-            var newPath = path.join(__dirname,'../../','/public/upload/'+poster)
+            var newPath = path.join(__dirname, '../../', '/public/upload/' + poster)
             //写入图片
-            fs.writeFile(newPath,data,function (err) {
+            fs.writeFile(newPath, data, function (err) {
                 //把poster放到请求头中.
                 req.poster = poster
                 next();
             })
         })
-    }else{
+    } else {
         next()
     }
 }

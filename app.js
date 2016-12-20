@@ -30,7 +30,7 @@ app.use(cookieSession({
     })
 }))
 app.set("views", './app/views/pages')     //设置视图根目录
-app.set('view engine', 'jade') //设置视图的模版引擎
+app.set('view engine', 'ejs') //设置视图的模版引擎
 // app.use(express.static(path.join(__dirname, 'bower_components')))
 app.use(express.static(path.join(__dirname, 'public')))
 //提交数据转换对象中间件
