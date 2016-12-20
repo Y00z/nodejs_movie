@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title><%= title %></title>
-    <%- include head%>
+    <%- include head %>
 </head>
 <body>
 <div class="container">
@@ -11,7 +11,42 @@
         <div class="page-header">
             <h1><%= title %></h1>
             <div class="col-md-4"></div>
-            <small>科幻迷</small>
+
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/">悠哉电影网</a>
+                        <p class="navbar-text"><a href="/admin/movie">添加电影</a></p>
+                        <p class="navbar-text"><a href="/admin/movie/list">电影列表</a></p>
+                        <p class="navbar-text"><a href="/admin/category">添加分类</a></p>
+                        <p class="navbar-text"><a href="/admin/category/list">分类列表</a></p>
+                        <p class="navbar-text"><a href="/admin/user/list">用户列表</a></p>
+                    </div>
+                    <div class="navbar-header navbar-right">
+                        <% if(user){ %>
+                        <p class="navbar-text">
+                            <span>欢迎您<%= user.name %></span>
+                            <% if(user.role >= 50){ %>
+                            <span>超级无敌管理员</span>
+                            <% } else { %>
+                            <span>普通管理员</span>
+                            <% } %>
+                            <span>&nbsp;|&nbsp;</span>
+                            <a class="navbar-link" href="/logout">退出</a>
+                        </p>
+                        <% } else{ %>
+                        <p class="navbar-text navbar-right">
+                            <a class="navbar-link" href="#" data-toggle="modal" data-target="#signinModal">注册</a>
+                            <span>&nbsp;|&nbsp;</span>
+                            <a class="navbar-link" href="#" data-toggle="modal" data-target="#signinLogin">登录</a>
+                        </p>
+                        <% } %> 
+                    </div>
+
+                </div>
+            </nav>
+
+
             <div class="col-md-8"></div>
             <form method="get" action="/results">
                 <div class="input-group col-md-4 pull-right">
@@ -25,31 +60,7 @@
     </div>
 </div>
 
-<div class="navbar navbar-defalut navbar-fixed-buttom">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">悠哉电影网</a>
-            <% if(user){ %>
-                <p class="navbar-text navbar-right">
-                    <span>欢迎您<%= user.name%></span>
-                    <%if(user.role >= 50){%>
-                        <span>超级无敌管理员</span>
-                    <%} else {%>
-                        <span>普通管理员</span>
-                    <%}%>
-                    <span>&nbsp;|&nbsp;</span>
-                    <a class="navbar-link" href="/logout">退出</a>
-                </p>
-            <% } else{%>
-                <p class="navbar-text navbar-right">
-                    <a class="navbar-link" href="#" data-toggle="modal" data-target="#signinModal">注册</a>
-                    <span>&nbsp;|&nbsp;</span>
-                    <a class="navbar-link" href="#" data-toggle="modal" data-target="#signinLogin">登录</a>
-                </p>
-            <%} %>
-        </div>
-    </div>
-</div>
+<br/>
 
 
 <div id="signinModal" class="modal fade">
@@ -60,11 +71,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="signinName">用户名</label>
-                        <input id="signinName" class="form-control" type="text" name="user[name]" />
+                        <input id="signinName" class="form-control" type="text" name="user[name]"/>
                     </div>
                     <div class="form-group">
                         <label for="signinPassword">密码</label>
-                        <input id="signinPassword" class="form-control" type="password" name="user[password]" />
+                        <input id="signinPassword" class="form-control" type="password" name="user[password]"/>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -85,11 +96,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="loginName">用户名</label>
-                        <input id="loginName" class="form-control" type="text" name="user[name]" />
+                        <input id="loginName" class="form-control" type="text" name="user[name]"/>
                     </div>
                     <div class="form-group">
                         <label for="loginPassword">密码</label>
-                        <input id="loginPassword" class="form-control" type="password" name="user[password]" />
+                        <input id="loginPassword" class="form-control" type="password" name="user[password]"/>
                     </div>
                 </div>
                 <div class="modal-footer">
